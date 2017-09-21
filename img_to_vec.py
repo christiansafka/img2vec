@@ -3,11 +3,6 @@ import torch.nn as nn
 import torchvision.models as models
 import torchvision.transforms as transforms
 from torch.autograd import Variable
-from PIL import Image
-import time
-
-torch.utils.backcompat.broadcast_warning.enabled = False
-torch.utils.backcompat.keepdim_warning.enabled = False
 
 class Img2Vec():
     def __init__(self, cuda=False):
@@ -18,8 +13,6 @@ class Img2Vec():
         else:
             self.resnet_18 = models.resnet18(pretrained=True)
 
-        # for param in self.resnet_18.parameters():
-        #     param.requires_grad = False
         self.resnet_18.eval()
 
         self.avgpool_layer = self.resnet_18._modules.get('avgpool')
@@ -28,9 +21,9 @@ class Img2Vec():
 
     def get_vec(self, img):
         if self.cuda:
-            image = Variable(self.to_tensor(self.scaler(img)).float().div(255).unsqueeze(0)).cuda()
+            image = Variable(self.to_tensor(self.scaler(img)).unsqueeze(0)).cuda()
         else:
-            image = Variable(self.to_tensor(self.scaler(img)).float().div(255).unsqueeze(0))
+            image = Variable(self.to_tensor(self.scaler(img)).unsqueeze(0))
 
         my_embedding = torch.zeros(512)
 
@@ -42,14 +35,3 @@ class Img2Vec():
         h.remove()
 
         return my_embedding.numpy()
-
-# a = Img2Vec()
-# scaler = transforms.Scale((224, 224))
-# to_tensor = transforms.ToTensor()
-# image = Variable(to_tensor(scaler(Image.open("test.jpg"))).float().div(255).unsqueeze(0))
-# print('ready')
-# t0 = time.time()
-# print(a.get_vec(image))
-# t1 = time.time()
-# print('took %d' % (t1-t0))
-#print(a.get_vec(image))

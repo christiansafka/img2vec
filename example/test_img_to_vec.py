@@ -5,13 +5,11 @@ from PIL import Image
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 
-
 input_path = './test_images'
 
 img2vec = Img2Vec(cuda=True)
 
 pics = {}
-
 for file in os.listdir(input_path):
     filename = os.fsdecode(file)
     img = Image.open(os.path.join(input_path, filename))
