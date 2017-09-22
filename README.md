@@ -94,9 +94,9 @@ alexnet.classifier = nn.Sequential(
             7. nn.Dropout(),                  < - output_size = 9216
             6. nn.Linear(256 * 6 * 6, 4096),  < - output_size = 4096
             5. nn.ReLU(inplace=True),         < - output_size = 4096
-            4. nn.Dropout(),				  < - output_size = 4096
-            3. nn.Linear(4096, 4096),		  < - output_size = 4096
-            2. nn.ReLU(inplace=True),		  < - output_size = 4096
+            4. nn.Dropout(),		      < - output_size = 4096
+            3. nn.Linear(4096, 4096),	      < - output_size = 4096
+            2. nn.ReLU(inplace=True),         < - output_size = 4096
             1. nn.Linear(4096, num_classes),  < - output_size = 4096
         )
 ```
