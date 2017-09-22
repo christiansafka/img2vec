@@ -1,14 +1,14 @@
 import sys
 import os
+sys.path.append("..")  # Adds higher directory to python modules path.
 from img_to_vec import Img2Vec
 from PIL import Image
-import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
+
 
 input_path = './test_images'
 
-sys.path.append("..")  # Adds higher directory to python modules path.
-img2vec = Img2Vec(cuda=True)
+img2vec = Img2Vec()
 
 # For each test image, we store the filename and vector as key, value in a dictionary
 pics = {}
