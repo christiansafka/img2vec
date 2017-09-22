@@ -33,17 +33,17 @@ Pillow:  ```pip install Pillow```
 ```
 Which filename would you like similarities for?
 cat.jpg
-0.791242 cat2.jpg
-0.677612 face.jpg
-0.656266 catdog.jpg
-0.585546 face2.jpg
+0.72832 cat2.jpg
+0.641478 catdog.jpg
+0.575845 face.jpg
+0.516689 face2.jpg
 
 Which filename would you like similarities for?
 face2.jpg
-0.763177 face.jpg
-0.585546 cat.jpg
-0.531366 cat2.jpg
-0.489123 catdog.jpg
+0.668525 face.jpg
+0.516689 cat.jpg
+0.50084 cat2.jpg
+0.484863 catdog.jpg
 ```
 Try adding your own photos!
 

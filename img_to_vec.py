@@ -4,7 +4,9 @@ import torchvision.models as models
 import torchvision.transforms as transforms
 from torch.autograd import Variable
 
+
 class Img2Vec():
+
     def __init__(self, cuda=False):
         self.cuda = cuda
 
@@ -17,13 +19,15 @@ class Img2Vec():
 
         self.avgpool_layer = self.resnet_18._modules.get('avgpool')
         self.scaler = transforms.Scale((224, 224))
+        self.normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
+                                              std=[0.229, 0.224, 0.225])
         self.to_tensor = transforms.ToTensor()
 
     def get_vec(self, img):
         if self.cuda:
-            image = Variable(self.to_tensor(self.scaler(img)).unsqueeze(0)).cuda()
+            image = Variable(self.normalize(self.to_tensor(self.scaler(img))).unsqueeze(0)).cuda()
         else:
-            image = Variable(self.to_tensor(self.scaler(img)).unsqueeze(0))
+            image = Variable(self.normalize(self.to_tensor(self.scaler(img))).unsqueeze(0))
 
         my_embedding = torch.zeros(512)
 
