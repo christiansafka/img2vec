@@ -1,9 +1,11 @@
+import os
+import argparse
+
 import torch
 import torch.nn as nn
 import torchvision.models as models
 import torchvision.transforms as transforms
 from torch.autograd import Variable
-
 
 class Img2Vec():
 
@@ -72,3 +74,33 @@ class Img2Vec():
 
         else:
             raise KeyError('Model %s was not found' % model_name)
+
+# Arguments for using img2vec as a CLI
+parser = argparse.ArgumentParser(description='Image to vector embedding with PyTorch')
+
+parser.add_argument('--input', '-i', metavar='PATH', required=True, help='path to directory of images')
+parser.add_argument('--output', '-o', metavar='OUTPUT', default='output.csv',
+                    help='csv to store image filenames and vector representations - Default: output.csv')
+parser.add_argument('--model', metavar='MODEL', default='resnet-18', help='model architecture - Default: resnet-18')
+parser.add_argument('--layer', metavar='LAYER', default='avgpool', help='Select a different layer from where to pull embeddings')
+parser.add_argument('--layer_output_size', metavar='VECSIZE', default=512, help='Provide the correct output size for a selected layer')
+parser.add_argument('--cuda', '-gpu', metavar='CUDA', default=False, help='Run the model on GPU - Default: False')
+
+args = parser.parse_args()
+
+def main():
+    img2vec = Img2Vec(cuda=args.cuda, model=args.model, layer=args.layer, layer_output_size=args.layer_output_size)
+    
+    with open(args.output, 'w') as f:
+        for file in tqdm(os.listdir(args.input)):
+            filename = os.fsdecode(file)
+            image = Image.open(os.path.join(args.input, filename))
+
+            row = filename + ',' + str(img2vec.get_vec(image)) + '\n'
+            f.write(row)
+
+
+if __name__ == "__main__":
+    from PIL import Image
+    from tqdm import tqdm
+    main()
