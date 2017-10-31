@@ -26,7 +26,7 @@ class Img2Vec():
                                               std=[0.229, 0.224, 0.225])
         self.to_tensor = transforms.ToTensor()
 
-    def get_vec(self, img):
+    def get_vec(self, img, tensor=False):
         """
             Parameters:
                 img: PIL image
@@ -47,7 +47,10 @@ class Img2Vec():
         h_x = self.model(image)
         h.remove()
 
-        return my_embedding.numpy()
+        if tensor:
+            return my_embedding
+        else:
+            return my_embedding.numpy()
 
     def _get_model_and_layer(self, model_name, layer):
         if model_name == 'resnet-18':
