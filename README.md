@@ -1,6 +1,6 @@
 # Image 2 Vec with PyTorch
 
-### Why do you want image embeddings?
+### Applications of image embeddings:
  - Ranking for recommender systems
  - Clustering images to different categories
  - Classification tasks
@@ -64,10 +64,12 @@ vec = img2vec.get_vec(img)
 ```
 #### Img2Vec Params
 **cuda** = (True, False) &nbsp; # Run on GPU? &nbsp; &nbsp; default: False<br>
-
-## Advanced users
-### Additional Parameters <br>
 **model** = ('resnet-18', 'alexnet') &nbsp; # Which model to use? &nbsp; &nbsp; default: 'resnet-18'<br>
+
+## Advanced users 
+----
+### Additional Parameters
+
 **layer** = 'layer_name' or int &nbsp; # For advanced users, which layer of the model to extract the output from.&nbsp;&nbsp; default: 'avgpool' <br>
 **layer_output_size** = int &nbsp; # Size of the output of your selected layer
 
