@@ -8,9 +8,11 @@ from torch.autograd import Variable
 class Img2Vec():
 
     def __init__(self, cuda=False, model='resnet-18', layer='default', layer_output_size=512):
-        """
-            Parameters:
-                see docs: https://github.com/christiansafka/img2vec
+        """ Img2Vec
+        :param cuda: If set to True, will run forward pass on GPU
+        :param model: String name of requested model
+        :param layer: String or Int depending on model.  See more docs: https://github.com/christiansafka/img2vec.git
+        :param layer_output_size: Int depicting the output size of the requested layer
         """
         self.cuda = cuda
         self.layer_output_size = layer_output_size
@@ -26,12 +28,11 @@ class Img2Vec():
                                               std=[0.229, 0.224, 0.225])
         self.to_tensor = transforms.ToTensor()
 
-    def get_vec(self, img):
-        """
-            Parameters:
-                img: PIL image
-            Returns:
-                Numpy vector representing input image
+    def get_vec(self, img, tensor=False):
+        """ Get vector embedding from PIL image
+        :param img: PIL Image
+        :param tensor: If True, get_vec will return a FloatTensor instead of Numpy array
+        :returns: Numpy ndarray
         """
         if self.cuda:
             image = Variable(self.normalize(self.to_tensor(self.scaler(img))).unsqueeze(0)).cuda()
@@ -47,9 +48,17 @@ class Img2Vec():
         h_x = self.model(image)
         h.remove()
 
-        return my_embedding.numpy()
+        if tensor:
+            return my_embedding
+        else:
+            return my_embedding.numpy()
 
     def _get_model_and_layer(self, model_name, layer):
+        """ Internal method for getting layer from model
+        :param model_name: model name such as 'resnet-18'
+        :param layer: layer as a string for resnet-18 or int for alexnet
+        :returns: pytorch model, selected layer
+        """
         if model_name == 'resnet-18':
             model = models.resnet18(pretrained=True)
             if layer == 'default':
