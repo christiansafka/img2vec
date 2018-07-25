@@ -2,7 +2,6 @@ import torch
 import torch.nn as nn
 import torchvision.models as models
 import torchvision.transforms as transforms
-from torch.autograd import Variable
 
 
 class Img2Vec():
@@ -14,12 +13,11 @@ class Img2Vec():
         :param layer: String or Int depending on model.  See more docs: https://github.com/christiansafka/img2vec.git
         :param layer_output_size: Int depicting the output size of the requested layer
         """
-        self.cuda = cuda
+        self.device = torch.device("cuda" if cuda else "cpu")
         self.layer_output_size = layer_output_size
         self.model, self.extraction_layer = self._get_model_and_layer(model, layer)
 
-        if self.cuda:
-            self.model.cuda()
+        self.model = self.model.to(self.device)
 
         self.model.eval()
 
@@ -34,12 +32,9 @@ class Img2Vec():
         :param tensor: If True, get_vec will return a FloatTensor instead of Numpy array
         :returns: Numpy ndarray
         """
-        if self.cuda:
-            image = Variable(self.normalize(self.to_tensor(self.scaler(img))).unsqueeze(0)).cuda()
-        else:
-            image = Variable(self.normalize(self.to_tensor(self.scaler(img))).unsqueeze(0))
+        image = self.normalize(self.to_tensor(self.scaler(img))).unsqueeze(0).to(self.device)
 
-        my_embedding = torch.zeros(self.layer_output_size)
+        my_embedding = torch.zeros(1, self.layer_output_size, 1, 1)
 
         def copy_data(m, i, o):
             my_embedding.copy_(o.data)
@@ -51,7 +46,7 @@ class Img2Vec():
         if tensor:
             return my_embedding
         else:
-            return my_embedding.numpy()
+            return my_embedding.numpy()[0, :, 0, 0]
 
     def _get_model_and_layer(self, model_name, layer):
         """ Internal method for getting layer from model
