@@ -15,6 +15,8 @@ class Img2Vec():
         """
         self.device = torch.device("cuda" if cuda else "cpu")
         self.layer_output_size = layer_output_size
+        self.model_name = model
+        
         self.model, self.extraction_layer = self._get_model_and_layer(model, layer)
 
         self.model = self.model.to(self.device)
@@ -34,7 +36,10 @@ class Img2Vec():
         """
         image = self.normalize(self.to_tensor(self.scaler(img))).unsqueeze(0).to(self.device)
 
-        my_embedding = torch.zeros(1, self.layer_output_size, 1, 1)
+        if self.model_name == 'alexnet':
+            my_embedding = torch.zeros(1, self.layer_output_size)
+        else:
+            my_embedding = torch.zeros(1, self.layer_output_size, 1, 1)
 
         def copy_data(m, i, o):
             my_embedding.copy_(o.data)
@@ -46,7 +51,10 @@ class Img2Vec():
         if tensor:
             return my_embedding
         else:
-            return my_embedding.numpy()[0, :, 0, 0]
+            if self.model_name == 'alexnet':
+                return my_embedding.numpy()[0, :]
+            else:
+                return my_embedding.numpy()[0, :, 0, 0]
 
     def _get_model_and_layer(self, model_name, layer):
         """ Internal method for getting layer from model
