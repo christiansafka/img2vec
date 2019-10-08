@@ -1,5 +1,7 @@
 # Image 2 Vec with PyTorch
 
+Medium post on building the first version from scratch:  https://becominghuman.ai/extract-a-feature-vector-for-any-image-with-pytorch-9717561d1d4c
+
 ### Applications of image embeddings:
  - Ranking for recommender systems
  - Clustering images to different categories
