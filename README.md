@@ -61,6 +61,8 @@ img2vec = Img2Vec(cuda=True)
 img = Image.open('test.jpg')
 # Get a vector from img2vec
 vec = img2vec.get_vec(img)
+# Or submit a list
+vectors = img2vec.get_vec(list_of_PIL_images)
 ```
 #### Img2Vec Params
 **cuda** = (True, False) &nbsp; # Run on GPU? &nbsp; &nbsp; default: False<br>
