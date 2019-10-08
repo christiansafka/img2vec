@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torchvision.models as models
 import torchvision.transforms as transforms
-
+import numpy as np
 
 class Img2Vec():
 
@@ -30,31 +30,55 @@ class Img2Vec():
 
     def get_vec(self, img, tensor=False):
         """ Get vector embedding from PIL image
-        :param img: PIL Image
+        :param img: PIL Image or list of PIL Images
         :param tensor: If True, get_vec will return a FloatTensor instead of Numpy array
         :returns: Numpy ndarray
         """
-        image = self.normalize(self.to_tensor(self.scaler(img))).unsqueeze(0).to(self.device)
-
-        if self.model_name == 'alexnet':
-            my_embedding = torch.zeros(1, self.layer_output_size)
-        else:
-            my_embedding = torch.zeros(1, self.layer_output_size, 1, 1)
-
-        def copy_data(m, i, o):
-            my_embedding.copy_(o.data)
-
-        h = self.extraction_layer.register_forward_hook(copy_data)
-        h_x = self.model(image)
-        h.remove()
-
-        if tensor:
-            return my_embedding
-        else:
+        if type(img) == list:
+            a = [self.normalize(self.to_tensor(self.scaler(im))) for im in img]
+            images = torch.stack(a).to(self.device) 
             if self.model_name == 'alexnet':
-                return my_embedding.numpy()[0, :]
+                my_embedding = torch.zeros(len(img), self.layer_output_size)
             else:
-                return my_embedding.numpy()[0, :, 0, 0]
+                my_embedding = torch.zeros(len(img), self.layer_output_size, 1, 1)
+
+            def copy_data(m, i, o):
+                my_embedding.copy_(o.data)
+
+            h = self.extraction_layer.register_forward_hook(copy_data)
+            h_x = self.model(images)
+            h.remove()
+
+            if tensor:
+                return my_embedding
+            else:
+                if self.model_name == 'alexnet':
+                    return my_embedding.numpy()[:, :]
+                else:
+                    print(my_embedding.numpy()[:, :, 0, 0].shape)
+                    return my_embedding.numpy()[:, :, 0, 0]
+        else:
+            image = self.normalize(self.to_tensor(self.scaler(img))).unsqueeze(0).to(self.device)
+
+            if self.model_name == 'alexnet':
+                my_embedding = torch.zeros(1, self.layer_output_size)
+            else:
+                my_embedding = torch.zeros(1, self.layer_output_size, 1, 1)
+
+            def copy_data(m, i, o):
+                my_embedding.copy_(o.data)
+
+            h = self.extraction_layer.register_forward_hook(copy_data)
+            h_x = self.model(image)
+            h.remove()
+
+            if tensor:
+                return my_embedding
+            else:
+                if self.model_name == 'alexnet':
+                    return my_embedding.numpy()[0, :]
+                else:
+                    return my_embedding.numpy()[0, :, 0, 0]
 
     def _get_model_and_layer(self, model_name, layer):
         """ Internal method for getting layer from model
