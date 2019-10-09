@@ -17,13 +17,29 @@ Medium post on building the first version from scratch:  https://becominghuman.a
 
 Tested on Python 3.6
 
-#### Dependencies
+Requires Pytorch: http://pytorch.org/
 
-Pytorch: http://pytorch.org/
+```pip install img2vec_pytorch```
 
-Pillow:  ```pip install Pillow```
+
+## Using img2vec as a library
+```python
+from img2vec_pytorch import Img2Vec
+from PIL import Image
+
+# Initialize Img2Vec with GPU
+img2vec = Img2Vec(cuda=True)
+
+# Read in an image
+img = Image.open('test.jpg')
+# Get a vector from img2vec, returned as a torch FloatTensor
+vec = img2vec.get_vec(img, tensor=True)
+# Or submit a list
+vectors = img2vec.get_vec(list_of_PIL_images)
+```
 
 ##### For running the example, you will additionally need:
+ * Pillow:  ```pip install Pillow```
  * Sklearn ```pip install scikit-learn```
 
 ## Running the example
@@ -51,21 +67,7 @@ face2.jpg
 ```
 Try adding your own photos!
 
-## Using img2vec as a library
-```python
-from img_to_vec import Img2Vec
-from PIL import Image
 
-# Initialize Img2Vec with GPU
-img2vec = Img2Vec(cuda=True)
-
-# Read in an image
-img = Image.open('test.jpg')
-# Get a vector from img2vec
-vec = img2vec.get_vec(img)
-# Or submit a list
-vectors = img2vec.get_vec(list_of_PIL_images)
-```
 #### Img2Vec Params
 **cuda** = (True, False) &nbsp; # Run on GPU? &nbsp; &nbsp; default: False<br>
 **model** = ('resnet-18', 'alexnet') &nbsp; # Which model to use? &nbsp; &nbsp; default: 'resnet-18'<br>
