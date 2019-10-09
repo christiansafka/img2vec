@@ -1,7 +1,7 @@
 import sys
 import os
 from shutil import copyfile
-sys.path.append("..")  # Adds higher directory to python modules path.
+sys.path.append("../img2vec_pytorch")  # Adds higher directory to python modules path.
 
 from img_to_vec import Img2Vec
 from PIL import Image
