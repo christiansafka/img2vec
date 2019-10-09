@@ -1,5 +1,7 @@
 # Image 2 Vec with PyTorch
 
+Medium post on building the first version from scratch:  https://becominghuman.ai/extract-a-feature-vector-for-any-image-with-pytorch-9717561d1d4c
+
 ### Applications of image embeddings:
  - Ranking for recommender systems
  - Clustering images to different categories
@@ -61,6 +63,8 @@ img2vec = Img2Vec(cuda=True)
 img = Image.open('test.jpg')
 # Get a vector from img2vec
 vec = img2vec.get_vec(img)
+# Or submit a list
+vectors = img2vec.get_vec(list_of_PIL_images)
 ```
 #### Img2Vec Params
 **cuda** = (True, False) &nbsp; # Run on GPU? &nbsp; &nbsp; default: False<br>
