@@ -1,3 +1,8 @@
+# Ignore example folders if generated
+!/example/
+/example/*/
+!/example/test_images/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
