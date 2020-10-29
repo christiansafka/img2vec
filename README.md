@@ -6,6 +6,7 @@ Medium post on building the first version from scratch:  https://becominghuman.a
  - Ranking for recommender systems
  - Clustering images to different categories
  - Classification tasks
+ - Image compression
 
 ## Available models
  - Resnet-18 (CPU, GPU)
@@ -113,7 +114,6 @@ alexnet.classifier = nn.Sequential(
 - Benchmark speed and accuracy
 - Add ability to fine-tune on input data
 - Export documentation to a normal place
-- Package for Pip
 
 
 
