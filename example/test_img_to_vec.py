@@ -8,6 +8,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 input_path = './test_images'
 
+print("Getting vectors for test images...\n")
 img2vec = Img2Vec()
 
 # For each test image, we store the filename and vector as key, value in a dictionary
@@ -18,9 +19,10 @@ for file in os.listdir(input_path):
     vec = img2vec.get_vec(img)
     pics[filename] = vec
 
+available_filenames = ", ".join(pics.keys())
 pic_name = ""
 while pic_name != "exit":
-    pic_name = str(input("Which filename would you like similarities for?\n"))
+    pic_name = str(input("\nWhich filename would you like similarities for?\nAvailable options: " + available_filenames + "\n"))
 
     try:
         sims = {}
