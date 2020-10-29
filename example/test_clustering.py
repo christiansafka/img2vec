@@ -9,6 +9,13 @@ import numpy as np
 from sklearn.cluster import KMeans
 from sklearn.decomposition import PCA
 
+"""
+    This example groups the images from test_images folder into k_value (default: 2) categories, and copies them into separate folders.
+    For cats and dogs you should end up with a folder of cats and a folder of dogs.
+
+    It uses Img2Vec to get the image vector, then applies PCA for dimensionality reduction and KNN for clustering.
+"""
+
 input_path = './test_images'
 files = os.listdir(input_path)
 
