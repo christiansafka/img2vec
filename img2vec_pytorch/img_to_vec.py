@@ -5,6 +5,13 @@ import torchvision.transforms as transforms
 import numpy as np
 
 class Img2Vec():
+    RESNET_OUTPUT_SIZES = {
+        'resnet18': 512,
+        'resnet34': 512,
+        'resnet50': 2048,
+        'resnet101': 2048,
+        'resnet152': 2048,
+    }
 
     def __init__(self, cuda=False, model='resnet-18', layer='default', layer_output_size=512):
         """ Img2Vec
@@ -16,7 +23,7 @@ class Img2Vec():
         self.device = torch.device("cuda" if cuda else "cpu")
         self.layer_output_size = layer_output_size
         self.model_name = model
-        
+
         self.model, self.extraction_layer = self._get_model_and_layer(model, layer)
 
         self.model = self.model.to(self.device)
@@ -36,7 +43,7 @@ class Img2Vec():
         """
         if type(img) == list:
             a = [self.normalize(self.to_tensor(self.scaler(im))) for im in img]
-            images = torch.stack(a).to(self.device) 
+            images = torch.stack(a).to(self.device)
             if self.model_name == 'alexnet':
                 my_embedding = torch.zeros(len(img), self.layer_output_size)
             else:
@@ -86,7 +93,16 @@ class Img2Vec():
         :param layer: layer as a string for resnet-18 or int for alexnet
         :returns: pytorch model, selected layer
         """
-        if model_name == 'resnet-18':
+
+        if model_name.startswith('resnet') and not model_name.startswith('resnet-'):
+            model = getattr(models, model_name)(pretrained=True)
+            if layer == 'default':
+                layer = model._modules.get('avgpool')
+                self.layer_output_size = self.RESNET_OUTPUT_SIZES[model_name]
+            else:
+                layer = model._modules.get(layer)
+            return model, layer
+        elif model_name == 'resnet-18':
             model = models.resnet18(pretrained=True)
             if layer == 'default':
                 layer = model._modules.get('avgpool')
