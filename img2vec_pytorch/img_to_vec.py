@@ -62,7 +62,6 @@ class Img2Vec():
                 if self.model_name == 'alexnet':
                     return my_embedding.numpy()[:, :]
                 else:
-                    print(my_embedding.numpy()[:, :, 0, 0].shape)
                     return my_embedding.numpy()[:, :, 0, 0]
         else:
             image = self.normalize(self.to_tensor(self.scaler(img))).unsqueeze(0).to(self.device)
