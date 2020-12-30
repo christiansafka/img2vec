@@ -22,6 +22,9 @@ Requires Pytorch: http://pytorch.org/
 
 ```pip install img2vec_pytorch```
 
+## Run test
+
+```python -m img2vec_pytorch.test_img_to_vec```
 
 ## Using img2vec as a library
 ```python
