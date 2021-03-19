@@ -78,6 +78,16 @@ Try adding your own photos!
 
 ## Advanced users 
 ----
+
+### Read only file systems
+
+If you use this library from the app running in read only environment (for example, docker container), 
+specify writable directory where app can store pre-trained models. 
+
+```bash
+export TORCH_HOME=/tmp/torch
+```
+
 ### Additional Parameters
 
 **layer** = 'layer_name' or int &nbsp; # For advanced users, which layer of the model to extract the output from.&nbsp;&nbsp; default: 'avgpool' <br>
