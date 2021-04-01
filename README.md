@@ -13,6 +13,10 @@ Medium post on building the first version from scratch:  https://becominghuman.a
  	- Returns vector length 512
  - Alexnet (CPU, GPU)
  	- Returns vector length 4096
+ - Vgg-11 (CPU, GPU)
+	- Returns vector length 4096
+ - Densenet (CPU, GPU)
+	- Returns vector length 1024
 
 ## Installation
 
@@ -74,7 +78,7 @@ Try adding your own photos!
 
 #### Img2Vec Params
 **cuda** = (True, False) &nbsp; # Run on GPU? &nbsp; &nbsp; default: False<br>
-**model** = ('resnet-18', 'alexnet') &nbsp; # Which model to use? &nbsp; &nbsp; default: 'resnet-18'<br>
+**model** = ('resnet-18', 'alexnet', 'vgg', 'densenet') &nbsp; # Which model to use? &nbsp; &nbsp; default: 'resnet-18'<br>
 
 ## Advanced users 
 ----
@@ -122,6 +126,33 @@ alexnet.classifier = nn.Sequential(
             1. nn.Linear(4096, num_classes),  < - output_size = 4096
         )
 ```
+
+### [Vgg](https://pytorch.org/vision/stable/_modules/torchvision/models/vgg.html)
+Defaults: (layer = 2, layer_output_size = 4096)<br>
+```python
+vgg.classifier = nn.Sequential(
+            nn.Linear(512 * 7 * 7, 4096),
+            nn.ReLU(True),
+            nn.Dropout(),
+            nn.Linear(4096, 4096),
+            nn.ReLU(True),
+            nn.Dropout(),
+            nn.Linear(4096, num_classes),
+        )
+```
+
+### [Densenet](https://pytorch.org/vision/stable/_modules/torchvision/models/densenet.html)
+Defaults: (layer = 1 from features, layer_output_size = 1024)<br>
+```python
+densenet.features = nn.Sequential(OrderedDict([
+	('conv0', nn.Conv2d(3, num_init_features, kernel_size=7, stride=2,
+						padding=3, bias=False)),
+	('norm0', nn.BatchNorm2d(num_init_features)),
+	('relu0', nn.ReLU(inplace=True)),
+	('pool0', nn.MaxPool2d(kernel_size=3, stride=2, padding=1)),
+]))
+```
+
 
 ## To-do
 - Benchmark speed and accuracy
