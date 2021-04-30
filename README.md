@@ -34,7 +34,7 @@ from PIL import Image
 # Initialize Img2Vec with GPU
 img2vec = Img2Vec(cuda=True)
 
-# Read in an image
+# Read in an image (rgb format)
 img = Image.open('test.jpg')
 # Get a vector from img2vec, returned as a torch FloatTensor
 vec = img2vec.get_vec(img, tensor=True)
