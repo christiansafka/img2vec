@@ -44,8 +44,10 @@ class Img2Vec():
         if type(img) == list:
             a = [self.normalize(self.to_tensor(self.scaler(im))) for im in img]
             images = torch.stack(a).to(self.device)
-            if self.model_name == 'alexnet':
+            if self.model_name in ['alexnet', 'vgg']:
                 my_embedding = torch.zeros(len(img), self.layer_output_size)
+            elif self.model_name == 'densenet':
+                my_embedding = torch.zeros(len(img), self.layer_output_size, 7, 7)
             else:
                 my_embedding = torch.zeros(len(img), self.layer_output_size, 1, 1)
 
@@ -59,15 +61,19 @@ class Img2Vec():
             if tensor:
                 return my_embedding
             else:
-                if self.model_name == 'alexnet':
+                if self.model_name in ['alexnet', 'vgg']:
                     return my_embedding.numpy()[:, :]
+                elif self.model_name == 'densenet':
+                    return torch.mean(my_embedding, (2, 3), True).numpy()[:, :, 0, 0]
                 else:
                     return my_embedding.numpy()[:, :, 0, 0]
         else:
             image = self.normalize(self.to_tensor(self.scaler(img))).unsqueeze(0).to(self.device)
 
-            if self.model_name == 'alexnet':
+            if self.model_name in ['alexnet', 'vgg']:
                 my_embedding = torch.zeros(1, self.layer_output_size)
+            elif self.model_name == 'densenet':
+                my_embedding = torch.zeros(1, self.layer_output_size, 7, 7)
             else:
                 my_embedding = torch.zeros(1, self.layer_output_size, 1, 1)
 
@@ -81,8 +87,10 @@ class Img2Vec():
             if tensor:
                 return my_embedding
             else:
-                if self.model_name == 'alexnet':
+                if self.model_name in ['alexnet', 'vgg']:
                     return my_embedding.numpy()[0, :]
+                elif self.model_name == 'densenet':
+                    return torch.mean(my_embedding, (2, 3), True).numpy()[0, :, 0, 0]
                 else:
                     return my_embedding.numpy()[0, :, 0, 0]
 
@@ -118,6 +126,28 @@ class Img2Vec():
                 self.layer_output_size = 4096
             else:
                 layer = model.classifier[-layer]
+
+            return model, layer
+
+        elif model_name == 'vgg':
+            # VGG-11
+            model = models.vgg11_bn(pretrained=True)
+            if layer == 'default':
+                layer = model.classifier[-2]
+                self.layer_output_size = model.classifier[-1].in_features # should be 4096
+            else:
+                layer = model.classifier[-layer]
+
+            return model, layer
+
+        elif model_name == 'densenet':
+            # Densenet-121
+            model = models.densenet121(pretrained=True)
+            if layer == 'default':
+                layer = model.features[-1]
+                self.layer_output_size = model.classifier.in_features # should be 1024
+            else:
+                raise KeyError('Un support %s for layer parameters' % model_name)
 
             return model, layer
 
