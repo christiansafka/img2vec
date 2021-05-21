@@ -55,7 +55,7 @@ vectors = img2vec.get_vec(list_of_PIL_images)
 
 ```cd img2vec/example```
 
-```python test_img_to_vec.py```
+```python test_img_similarity.py```
 
 #### Expected output
 ```
