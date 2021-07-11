@@ -55,7 +55,8 @@ class Img2Vec():
                 my_embedding.copy_(o.data)
 
             h = self.extraction_layer.register_forward_hook(copy_data)
-            h_x = self.model(images)
+            with torch.no_grad():
+                h_x = self.model(images)
             h.remove()
 
             if tensor:
@@ -81,7 +82,8 @@ class Img2Vec():
                 my_embedding.copy_(o.data)
 
             h = self.extraction_layer.register_forward_hook(copy_data)
-            h_x = self.model(image)
+            with torch.no_grad():
+                h_x = self.model(image)
             h.remove()
 
             if tensor:
