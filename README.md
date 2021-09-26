@@ -9,19 +9,12 @@ Medium post on building the first version from scratch:  https://becominghuman.a
  - Image compression
 
 ## Available models
- - Resnet-18 (CPU, GPU)
-   - Returns vector length 512
- - Alexnet (CPU, GPU)
-   - Returns vector length 4096
- - Vgg-11 (CPU, GPU)
-   - Returns vector length 4096
- - Densenet (CPU, GPU)
-   - Returns vector length 1024
- - EfficientNet (CPU, GPU)
-   - EfficientNet b0 ~b7
- 
-|model|vector length|
+|Model name|Return vector length|
 |----|----|
+|Resnet-18|512|
+|Alexnet|4096|
+|Vgg-11|4096|
+|Densenet|1024|
 |efficientnet_b0|1280|
 |efficientnet_b1|1280|
 |efficientnet_b2|1408|
