@@ -10,7 +10,18 @@ class Img2Vec():
         'resnet34': 512,
         'resnet50': 2048,
         'resnet101': 2048,
-        'resnet152': 2048,
+        'resnet152': 2048
+    }
+
+    EFFICIENTNET_OUTPUT_SIZES = {
+        'efficientnet_b0': 1280,
+        'efficientnet_b1': 1280,
+        'efficientnet_b2': 1408,
+        'efficientnet_b3': 1536,
+        'efficientnet_b4': 1792,
+        'efficientnet_b5': 2048,
+        'efficientnet_b6': 2304,
+        'efficientnet_b7': 2560
     }
 
     def __init__(self, cuda=False, model='resnet-18', layer='default', layer_output_size=512):
@@ -46,7 +57,7 @@ class Img2Vec():
             images = torch.stack(a).to(self.device)
             if self.model_name in ['alexnet', 'vgg']:
                 my_embedding = torch.zeros(len(img), self.layer_output_size)
-            elif self.model_name == 'densenet':
+            elif self.model_name == 'densenet' or 'efficientnet' in self.model_name:
                 my_embedding = torch.zeros(len(img), self.layer_output_size, 7, 7)
             else:
                 my_embedding = torch.zeros(len(img), self.layer_output_size, 1, 1)
@@ -64,7 +75,7 @@ class Img2Vec():
             else:
                 if self.model_name in ['alexnet', 'vgg']:
                     return my_embedding.numpy()[:, :]
-                elif self.model_name == 'densenet':
+                elif self.model_name == 'densenet' or 'efficientnet' in self.model_name:
                     return torch.mean(my_embedding, (2, 3), True).numpy()[:, :, 0, 0]
                 else:
                     return my_embedding.numpy()[:, :, 0, 0]
@@ -73,7 +84,7 @@ class Img2Vec():
 
             if self.model_name in ['alexnet', 'vgg']:
                 my_embedding = torch.zeros(1, self.layer_output_size)
-            elif self.model_name == 'densenet':
+            elif self.model_name == 'densenet' or 'efficientnet' in self.model_name:
                 my_embedding = torch.zeros(1, self.layer_output_size, 7, 7)
             else:
                 my_embedding = torch.zeros(1, self.layer_output_size, 1, 1)
@@ -148,6 +159,35 @@ class Img2Vec():
             if layer == 'default':
                 layer = model.features[-1]
                 self.layer_output_size = model.classifier.in_features # should be 1024
+            else:
+                raise KeyError('Un support %s for layer parameters' % model_name)
+
+            return model, layer
+
+        elif "efficientnet" in model_name:
+            # efficientnet-b0 ~ efficientnet-b7
+            if model_name == "efficientnet_b0":
+                model = models.efficientnet_b0(pretrained=True)
+            elif model_name == "efficientnet_b1":
+                model = models.efficientnet_b1(pretrained=True)
+            elif model_name == "efficientnet_b2":
+                model = models.efficientnet_b2(pretrained=True)
+            elif model_name == "efficientnet_b3":
+                model = models.efficientnet_b3(pretrained=True)
+            elif model_name == "efficientnet_b4":
+                model = models.efficientnet_b4(pretrained=True)
+            elif model_name == "efficientnet_b5":
+                model = models.efficientnet_b5(pretrained=True)
+            elif model_name == "efficientnet_b6":
+                model = models.efficientnet_b6(pretrained=True)
+            elif model_name == "efficientnet_b7":
+                model = models.efficientnet_b7(pretrained=True)
+            else:
+                raise KeyError('Un support %s.' % model_name)
+
+            if layer == 'default':
+                layer = model.features
+                self.layer_output_size = self.EFFICIENTNET_OUTPUT_SIZES[model_name]
             else:
                 raise KeyError('Un support %s for layer parameters' % model_name)
 
