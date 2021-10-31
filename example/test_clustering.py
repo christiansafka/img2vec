@@ -34,7 +34,7 @@ print('Reading images...')
 for index, i in enumerate(sample_indices):
     file = files[i]
     filename = os.fsdecode(file)
-    img = Image.open(os.path.join(input_path, filename))
+    img = Image.open(os.path.join(input_path, filename)).convert('RGB')
     vec = img2vec.get_vec(img)
     vec_mat[index, :] = vec
 
