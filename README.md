@@ -88,7 +88,7 @@ Try adding your own photos!
 
 #### Img2Vec Params
 **cuda** = (True, False) &nbsp; # Run on GPU? &nbsp; &nbsp; default: False<br>
-**model** = ('resnet-18', 'alexnet', 'vgg', 'densenet') &nbsp; # Which model to use? &nbsp; &nbsp; default: 'resnet-18'<br>
+**model** = ('resnet-18', 'efficientnet_b0', etc.) &nbsp; # Which model to use? &nbsp; &nbsp; default: 'resnet-18'<br>
 
 ## Advanced users 
 ----

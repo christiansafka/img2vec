@@ -7,7 +7,7 @@ with open(os.path.join(current_folder, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name='img2vec_pytorch',
-    version='0.2.5',
+    version='1.0.1',
     description='Use pre-trained models in PyTorch to extract vector embeddings for any image',
     long_description=long_description,
     long_description_content_type='text/markdown',
