@@ -15,7 +15,7 @@ img2vec = Img2Vec()
 pics = {}
 for file in os.listdir(input_path):
     filename = os.fsdecode(file)
-    img = Image.open(os.path.join(input_path, filename))
+    img = Image.open(os.path.join(input_path, filename)).convert('RGB')
     vec = img2vec.get_vec(img)
     pics[filename] = vec
 

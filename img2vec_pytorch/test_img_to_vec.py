@@ -8,7 +8,7 @@ from . import Img2Vec
 class TestImg2Vec(unittest.TestCase):
     def test_default(self):
         img2vec = Img2Vec()
-        img = Image.open('./example/test_images/cat.jpg')
+        img = Image.open('./example/test_images/cat.jpg').convert('RGB')
         vec = img2vec.get_vec(img)
         self.assertEqual(True, isinstance(vec, numpy.ndarray))
         self.assertEqual(1, vec.ndim)
@@ -16,7 +16,7 @@ class TestImg2Vec(unittest.TestCase):
 
     def test_alexnet(self):
         img2vec = Img2Vec(model='alexnet')
-        img = Image.open('./example/test_images/cat.jpg')
+        img = Image.open('./example/test_images/cat.jpg').convert('RGB')
         vec = img2vec.get_vec(img)
         self.assertEqual(True, isinstance(vec, numpy.ndarray))
         self.assertEqual(1, vec.ndim)
@@ -24,7 +24,7 @@ class TestImg2Vec(unittest.TestCase):
 
     def test_vgg(self):
         img2vec = Img2Vec(model='vgg')
-        img = Image.open('./example/test_images/cat.jpg')
+        img = Image.open('./example/test_images/cat.jpg').convert('RGB')
         vec = img2vec.get_vec(img)
         self.assertEqual(True, isinstance(vec, numpy.ndarray))
         self.assertEqual(1, vec.ndim)
@@ -32,7 +32,7 @@ class TestImg2Vec(unittest.TestCase):
 
     def test_densenet(self):
         img2vec = Img2Vec(model='densenet')
-        img = Image.open('./example/test_images/cat.jpg')
+        img = Image.open('./example/test_images/cat.jpg').convert('RGB')
         vec = img2vec.get_vec(img)
         self.assertEqual(True, isinstance(vec, numpy.ndarray))
         self.assertEqual(1, vec.ndim)
