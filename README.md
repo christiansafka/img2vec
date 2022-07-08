@@ -105,7 +105,7 @@ export TORCH_HOME=/tmp/torch
 ### Additional Parameters
 
 **layer** = 'layer_name' or int &nbsp; # For advanced users, which layer of the model to extract the output from.&nbsp;&nbsp; default: 'avgpool' <br>
-**layer_output_size** = int &nbsp; # Size of the output of your selected layer
+**layer_output_size** = int &nbsp; # Size of the output of your selected layer<br>
 **gpu** = (0, 1, etc.) &nbsp; # Which GPU to use? &nbsp; &nbsp; default: 0<br>
 
 ### [Resnet-18](http://pytorch-zh.readthedocs.io/en/latest/_modules/torchvision/models/resnet.html)
