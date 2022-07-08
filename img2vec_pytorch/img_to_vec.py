@@ -24,14 +24,14 @@ class Img2Vec():
         'efficientnet_b7': 2560
     }
 
-    def __init__(self, cuda=False, model='resnet-18', layer='default', layer_output_size=512):
+    def __init__(self, cuda=False, model='resnet-18', layer='default', layer_output_size=512. gpu=0):
         """ Img2Vec
         :param cuda: If set to True, will run forward pass on GPU
         :param model: String name of requested model
         :param layer: String or Int depending on model.  See more docs: https://github.com/christiansafka/img2vec.git
         :param layer_output_size: Int depicting the output size of the requested layer
         """
-        self.device = torch.device("cuda" if cuda else "cpu")
+        self.device = torch.device(f"cuda:{gpu}" if cuda else "cpu")
         self.layer_output_size = layer_output_size
         self.model_name = model
 
