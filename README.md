@@ -2,8 +2,6 @@
 
 Medium post on building the first version from scratch:  https://becominghuman.ai/extract-a-feature-vector-for-any-image-with-pytorch-9717561d1d4c
 
-Looking for a simpler image vector integration for your project?  Check out our free API at https://latentvector.space
-
 ### Applications of image embeddings:
  - Ranking for recommender systems
  - Clustering images to different categories
