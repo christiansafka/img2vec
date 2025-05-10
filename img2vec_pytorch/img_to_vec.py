@@ -47,6 +47,13 @@ class Img2Vec():
         'efficientnet_b6': 2304,
         'efficientnet_b7': 2560
     }
+    
+    DENSENET_OUTPUT_SIZE = {
+        'densenet121' : 1024,
+        'densenet161' : 2208,
+        'densenet169' : 1664,
+        'densenet201' : 1920
+    }
 
     def __init__(self, cuda=False, model='resnet', layer='default', layer_output_size=512, gpu=0):
         """ Img2Vec
@@ -110,7 +117,7 @@ class Img2Vec():
             else:
                 if self.model_name in ['alexnet', 'vgg', 'vgg11', 'vgg13', 'vgg16', 'vgg19']:
                     return my_embedding.numpy()
-                elif self.model_name == 'densenet' or 'efficientnet' in self.model_name:
+                elif self.model_name.startswith('densenet') or 'efficientnet' in self.model_name:
                     return torch.mean(my_embedding, (2, 3), True).numpy()[:, :, 0, 0]
                 else:
                     return my_embedding.numpy()[:, :, 0, 0]
@@ -123,7 +130,7 @@ class Img2Vec():
 
             if self.model_name in ['alexnet', 'vgg', 'vgg11', 'vgg13', 'vgg16', 'vgg19']:
                 my_embedding = torch.zeros(1, self.layer_output_size)
-            elif self.model_name == 'densenet' or 'efficientnet' in self.model_name:
+            elif self.model_name.startswith('densenet') or 'efficientnet' in self.model_name:
                 my_embedding = torch.zeros(1, self.layer_output_size, 7, 7)
             else:
                 my_embedding = torch.zeros(1, self.layer_output_size, 1, 1)
@@ -148,7 +155,7 @@ class Img2Vec():
             else:
                 if self.model_name in ['alexnet', 'vgg', 'vgg11', 'vgg13', 'vgg16', 'vgg19']:
                     return my_embedding.numpy()[0, :]
-                elif self.model_name == 'densenet':
+                elif self.model_name.startswith('densenet'):
                     return torch.mean(my_embedding, (2, 3), True).numpy()[0, :, 0, 0]
                 else:
                     return my_embedding.numpy()[0, :, 0, 0]
@@ -177,6 +184,16 @@ class Img2Vec():
             elif model_name == 'vgg19':
                 return vgg19_bn(weights=VGG19_BN_Weights.DEFAULT)
             
+    def _get_densenet_model(self, model_name):
+        """ Helper function to get DenseNet model based on model_name """
+        if model_name == 'densenet121':
+            return densenet121(weights=DenseNet121_Weights.DEFAULT)   
+        elif model_name == 'densenet161':
+            return densenet161(weights=DenseNet161_Weights.DEFAULT)
+        elif model_name == 'densenet169':
+            return densenet169(weights=DenseNet169_Weights.DEFAULT)  
+        elif model_name == 'densenet201':
+            return densenet201(weights=DenseNet201_Weights.DEFAULT)     
     def _get_model_and_layer(self, model_name, layer):
     
         """ Internal method for getting layer from model
@@ -232,16 +249,26 @@ class Img2Vec():
                 layer = model.classifier[-layer]
             return model, layer
 
-        # elif model_name == 'densenet':
-        #     # Densenet-121
-        #     model = models.densenet121(pretrained=True)
-        #     if layer == 'default':
-        #         layer = model.features[-1]
-        #         self.layer_output_size = model.classifier.in_features # should be 1024
-        #     else:
-        #         raise KeyError('Un support %s for layer parameters' % model_name)
+        elif model_name == 'densenet':
+            model = densenet121(weights=DenseNet121_Weights.DEFAULT)
+            if layer == 'default':
+                layer = model.features[-1]
+                self.layer_output_size = model.classifier.in_features # should be 1024
+            else:
+                raise KeyError('Un support %s for layer parameters' % model_name)
 
-        #     return model, layer
+            return model, layer
+        
+        elif model_name in ['densenet121', 'densenet161', 'densenet169', 'densenet201']:
+            model = self._get_densenet_model(model_name)
+            
+            if layer == 'default':
+                layer = model.features[-1]
+                self.layer_output_size = self.DENSENET_OUTPUT_SIZE[model_name]
+            else:
+                raise KeyError('Un support %s for layer parameters' % model_name)
+
+            return model, layer
 
         # elif "efficientnet" in model_name:
         #     # efficientnet-b0 ~ efficientnet-b7

@@ -77,14 +77,70 @@ class TestImg2Vec(unittest.TestCase):
         self.assertEqual(True, isinstance(vec, numpy.ndarray))
         self.assertEqual(1, vec.ndim)
         self.assertEqual(4096, vec.size)
+    
+    def test_vgg13(self):
+        img2vec = Img2Vec(model='vgg13')
+        img = Image.open(test_image).convert('RGB')
+        vec = img2vec.get_vec(img)
+        self.assertEqual(True, isinstance(vec, numpy.ndarray))
+        self.assertEqual(1, vec.ndim)
+        self.assertEqual(4096, vec.size)
+        
+    def test_vgg16(self):
+        img2vec = Img2Vec(model='vgg16')
+        img = Image.open(test_image).convert('RGB')
+        vec = img2vec.get_vec(img)
+        self.assertEqual(True, isinstance(vec, numpy.ndarray))
+        self.assertEqual(1, vec.ndim)
+        self.assertEqual(4096, vec.size)
+    
+    def test_vgg19(self):
+        img2vec = Img2Vec(model='vgg19')
+        img = Image.open(test_image).convert('RGB')
+        vec = img2vec.get_vec(img)
+        self.assertEqual(True, isinstance(vec, numpy.ndarray))
+        self.assertEqual(1, vec.ndim)
+        self.assertEqual(4096, vec.size)
 
-    # def test_densenet(self):
-    #     img2vec = Img2Vec(model='densenet')
-    #     img = Image.open(test_image).convert('RGB')
-    #     vec = img2vec.get_vec(img)
-    #     self.assertEqual(True, isinstance(vec, numpy.ndarray))
-    #     self.assertEqual(1, vec.ndim)
-    #     self.assertEqual(1024, vec.size)
+    def test_densenet(self):
+        img2vec = Img2Vec(model='densenet')
+        img = Image.open(test_image).convert('RGB')
+        vec = img2vec.get_vec(img)
+        self.assertEqual(True, isinstance(vec, numpy.ndarray))
+        self.assertEqual(1, vec.ndim)
+        self.assertEqual(1024, vec.size)
+    
+    def test_densenet121(self):
+        img2vec = Img2Vec(model='densenet121')
+        img = Image.open(test_image).convert('RGB')
+        vec = img2vec.get_vec(img)
+        self.assertEqual(True, isinstance(vec, numpy.ndarray))
+        self.assertEqual(1, vec.ndim)
+        self.assertEqual(1024, vec.size)
+        
+    def test_densenet161(self):
+        img2vec = Img2Vec(model='densenet161')
+        img = Image.open(test_image).convert('RGB')
+        vec = img2vec.get_vec(img)
+        self.assertEqual(True, isinstance(vec, numpy.ndarray))
+        self.assertEqual(1, vec.ndim)
+        self.assertEqual(2208, vec.size)
+    
+    def test_densenet169(self):
+        img2vec = Img2Vec(model='densenet169')
+        img = Image.open(test_image).convert('RGB')
+        vec = img2vec.get_vec(img)
+        self.assertEqual(True, isinstance(vec, numpy.ndarray))
+        self.assertEqual(1, vec.ndim)
+        self.assertEqual(1664, vec.size)
+    
+    def test_densenet201(self):
+        img2vec = Img2Vec(model='densenet201')
+        img = Image.open(test_image).convert('RGB')
+        vec = img2vec.get_vec(img)
+        self.assertEqual(True, isinstance(vec, numpy.ndarray))
+        self.assertEqual(1, vec.ndim)
+        self.assertEqual(1920, vec.size)
 
     # def test_efficientnet_b0(self):
     #     img2vec = Img2Vec(model='efficientnet_b0')
