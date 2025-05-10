@@ -62,13 +62,21 @@ class TestImg2Vec(unittest.TestCase):
         self.assertEqual(1, vec.ndim)
         self.assertEqual(4096, vec.size)
 
-    # def test_vgg(self):
-    #     img2vec = Img2Vec(model='vgg')
-    #     img = Image.open(test_image).convert('RGB')
-    #     vec = img2vec.get_vec(img)
-    #     self.assertEqual(True, isinstance(vec, numpy.ndarray))
-    #     self.assertEqual(1, vec.ndim)
-    #     self.assertEqual(4096, vec.size)
+    def test_vgg(self):
+        img2vec = Img2Vec(model='vgg')
+        img = Image.open(test_image).convert('RGB')
+        vec = img2vec.get_vec(img)
+        self.assertEqual(True, isinstance(vec, numpy.ndarray))
+        self.assertEqual(1, vec.ndim)
+        self.assertEqual(4096, vec.size)
+    
+    def test_vgg11(self):
+        img2vec = Img2Vec(model='vgg11')
+        img = Image.open(test_image).convert('RGB')
+        vec = img2vec.get_vec(img)
+        self.assertEqual(True, isinstance(vec, numpy.ndarray))
+        self.assertEqual(1, vec.ndim)
+        self.assertEqual(4096, vec.size)
 
     # def test_densenet(self):
     #     img2vec = Img2Vec(model='densenet')

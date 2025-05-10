@@ -83,7 +83,7 @@ class Img2Vec():
         if type(img) == list:
             a = [self.transforms(im) for im in img]
             images = torch.stack(a).to(self.device)
-            if self.model_name in ['alexnet', 'vgg']:
+            if self.model_name in ['alexnet', 'vgg', 'vgg11', 'vgg13', 'vgg16', 'vgg19']:
                 my_embedding = torch.zeros(len(img), self.layer_output_size)
             elif self.model_name == 'densenet' or 'efficientnet' in self.model_name:
                 my_embedding = torch.zeros(len(img), self.layer_output_size, 7, 7)
@@ -91,7 +91,14 @@ class Img2Vec():
                 my_embedding = torch.zeros(len(img), self.layer_output_size, 1, 1)
 
             def copy_data(m, i, o):
-                my_embedding.copy_(o.data)
+                if self.model_name in ['alexnet', 'vgg', 'vgg11', 'vgg13', 'vgg16', 'vgg19']:
+                    # For VGG models, reshape the output tensor to 2D before copying
+                    if len(o.data.shape) == 4:
+                        my_embedding.copy_(o.data.squeeze(-1).squeeze(-1))
+                    else:
+                        my_embedding.copy_(o.data)
+                else:
+                    my_embedding.copy_(o.data)
 
             h = self.extraction_layer.register_forward_hook(copy_data)
             with torch.no_grad():
@@ -101,8 +108,8 @@ class Img2Vec():
             if tensor:
                 return my_embedding
             else:
-                if self.model_name in ['alexnet', 'vgg']:
-                    return my_embedding.numpy()[:, :]
+                if self.model_name in ['alexnet', 'vgg', 'vgg11', 'vgg13', 'vgg16', 'vgg19']:
+                    return my_embedding.numpy()
                 elif self.model_name == 'densenet' or 'efficientnet' in self.model_name:
                     return torch.mean(my_embedding, (2, 3), True).numpy()[:, :, 0, 0]
                 else:
@@ -114,7 +121,7 @@ class Img2Vec():
             except Exception as e:
                 raise ValueError(f"Invalid image input: {e}")
 
-            if self.model_name in ['alexnet', 'vgg']:
+            if self.model_name in ['alexnet', 'vgg', 'vgg11', 'vgg13', 'vgg16', 'vgg19']:
                 my_embedding = torch.zeros(1, self.layer_output_size)
             elif self.model_name == 'densenet' or 'efficientnet' in self.model_name:
                 my_embedding = torch.zeros(1, self.layer_output_size, 7, 7)
@@ -122,7 +129,14 @@ class Img2Vec():
                 my_embedding = torch.zeros(1, self.layer_output_size, 1, 1)
 
             def copy_data(m, i, o):
-                my_embedding.copy_(o.data)
+                if self.model_name in ['alexnet', 'vgg', 'vgg11', 'vgg13', 'vgg16', 'vgg19']:
+                    # For VGG models, reshape the output tensor to 2D before copying
+                    if len(o.data.shape) == 4:
+                        my_embedding.copy_(o.data.squeeze(-1).squeeze(-1))
+                    else:
+                        my_embedding.copy_(o.data)
+                else:
+                    my_embedding.copy_(o.data)
 
             h = self.extraction_layer.register_forward_hook(copy_data)
             with torch.no_grad():
@@ -132,7 +146,7 @@ class Img2Vec():
             if tensor:
                 return my_embedding
             else:
-                if self.model_name in ['alexnet', 'vgg']:
+                if self.model_name in ['alexnet', 'vgg', 'vgg11', 'vgg13', 'vgg16', 'vgg19']:
                     return my_embedding.numpy()[0, :]
                 elif self.model_name == 'densenet':
                     return torch.mean(my_embedding, (2, 3), True).numpy()[0, :, 0, 0]
@@ -151,6 +165,18 @@ class Img2Vec():
                 return resnet101(weights=ResNet101_Weights.DEFAULT)
             elif model_name == 'resnet152':
                 return resnet152(weights=ResNet152_Weights.DEFAULT)
+            
+    def _get_vgg_model(self, model_name):
+            """ Helper function to get VGG model based on model_name """
+            if model_name == 'vgg11':
+                return vgg11_bn(weights=VGG11_BN_Weights.DEFAULT)
+            elif model_name == 'vgg13':
+                return vgg13_bn(weights=VGG13_BN_Weights.DEFAULT)
+            elif model_name == 'vgg16':
+                return vgg16_bn(weights=VGG16_BN_Weights.DEFAULT)
+            elif model_name == 'vgg19':
+                return vgg19_bn(weights=VGG19_BN_Weights.DEFAULT)
+            
     def _get_model_and_layer(self, model_name, layer):
     
         """ Internal method for getting layer from model
@@ -178,26 +204,33 @@ class Img2Vec():
 
             return model, layer
 
-        # elif model_name == 'alexnet':
-        #     model = models.alexnet(pretrained=True)
-        #     if layer == 'default':
-        #         layer = model.classifier[-2]
-        #         self.layer_output_size = 4096
-        #     else:
-        #         layer = model.classifier[-layer]
+        elif model_name == 'alexnet':
+            model = alexnet(weights=AlexNet_Weights.DEFAULT)
+            if layer == 'default':
+                layer = model.classifier[-2]
+                self.layer_output_size = 4096
+            else:
+                layer = model.classifier[-layer]
 
-        #     return model, layer
-
-        # elif model_name == 'vgg':
-        #     # VGG-11
-        #     model = models.vgg11_bn(pretrained=True)
-        #     if layer == 'default':
-        #         layer = model.classifier[-2]
-        #         self.layer_output_size = model.classifier[-1].in_features # should be 4096
-        #     else:
-        #         layer = model.classifier[-layer]
-
-        #     return model, layer
+            return model, layer
+        
+        elif model_name == 'vgg':
+            model = vgg11_bn(weights=VGG11_BN_Weights.DEFAULT)
+            if layer == 'default':
+                layer = model.classifier[-2]
+                self.layer_output_size = model.classifier[-1].in_features # should be 4096
+            else:
+                layer = model.classifier[-layer]
+            return model, layer
+                
+        elif model_name in ['vgg11','vgg13', 'vgg16', 'vgg19']:
+            model = self._get_vgg_model(model_name)
+            if layer == 'default':
+                layer = model.classifier[-2]
+                self.layer_output_size = model.classifier[-1].in_features
+            else:
+                layer = model.classifier[-layer]
+            return model, layer
 
         # elif model_name == 'densenet':
         #     # Densenet-121
