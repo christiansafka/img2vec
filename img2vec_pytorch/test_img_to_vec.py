@@ -13,6 +13,46 @@ class TestImg2Vec(unittest.TestCase):
         self.assertEqual(True, isinstance(vec, numpy.ndarray))
         self.assertEqual(1, vec.ndim)
         self.assertEqual(512, vec.size)
+        
+    def test_resnet18(self):
+        img2vec = Img2Vec(model='resnet18')
+        img = Image.open(test_image).convert('RGB')
+        vec = img2vec.get_vec(img)
+        self.assertEqual(True, isinstance(vec, numpy.ndarray))
+        self.assertEqual(1, vec.ndim)
+        self.assertEqual(512, vec.size)
+        
+    def test_resnet34(self):
+        img2vec = Img2Vec(model='resnet34')
+        img = Image.open(test_image).convert('RGB')
+        vec = img2vec.get_vec(img)
+        self.assertEqual(True, isinstance(vec, numpy.ndarray))
+        self.assertEqual(1, vec.ndim)
+        self.assertEqual(512, vec.size)
+        
+    def test_resnet50(self):
+        img2vec = Img2Vec(model='resnet50')
+        img = Image.open(test_image).convert('RGB')
+        vec = img2vec.get_vec(img)
+        self.assertEqual(True, isinstance(vec, numpy.ndarray))
+        self.assertEqual(1, vec.ndim)
+        self.assertEqual(2048, vec.size)
+        
+    def test_resnet101(self):
+        img2vec = Img2Vec(model='resnet101')
+        img = Image.open(test_image).convert('RGB')
+        vec = img2vec.get_vec(img)
+        self.assertEqual(True, isinstance(vec, numpy.ndarray))
+        self.assertEqual(1, vec.ndim)
+        self.assertEqual(2048, vec.size)
+    
+    def test_resnet152(self):
+        img2vec = Img2Vec(model='resnet152')
+        img = Image.open(test_image).convert('RGB')
+        vec = img2vec.get_vec(img)
+        self.assertEqual(True, isinstance(vec, numpy.ndarray))
+        self.assertEqual(1, vec.ndim)
+        self.assertEqual(2048, vec.size)
 
     # def test_alexnet(self):
     #     img2vec = Img2Vec(model='alexnet')
