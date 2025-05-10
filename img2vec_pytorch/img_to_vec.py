@@ -194,6 +194,27 @@ class Img2Vec():
             return densenet169(weights=DenseNet169_Weights.DEFAULT)  
         elif model_name == 'densenet201':
             return densenet201(weights=DenseNet201_Weights.DEFAULT)     
+    
+    def _get_efficientnet_model(self, model_name):
+        """ Helper function to get EfficientNet model based on model_name """
+        if model_name == 'efficientnet_b0':
+            return efficientnet_b0(weights = EfficientNet_B0_Weights.DEFAULT)
+        elif model_name == 'efficientnet_b1':
+            return efficientnet_b1(weights = EfficientNet_B1_Weights.DEFAULT)
+        elif model_name == 'efficientnet_b2':
+            return efficientnet_b2(weights = EfficientNet_B2_Weights.DEFAULT)
+        elif model_name == 'efficientnet_b3':
+            return efficientnet_b3(weights = EfficientNet_B3_Weights.DEFAULT)
+        elif model_name == 'efficientnet_b4':
+            return efficientnet_b4(weights = EfficientNet_B4_Weights.DEFAULT)
+        elif model_name == 'efficientnet_b5':
+            return efficientnet_b5(weights = EfficientNet_B5_Weights.DEFAULT)
+        elif model_name == 'efficientnet_b6':
+            return efficientnet_b6(weights = EfficientNet_B6_Weights.DEFAULT)
+        elif model_name == 'efficientnet_b7':
+            return efficientnet_b7(weights = EfficientNet_B7_Weights.DEFAULT)
+        
+       
     def _get_model_and_layer(self, model_name, layer):
     
         """ Internal method for getting layer from model
@@ -270,34 +291,20 @@ class Img2Vec():
 
             return model, layer
 
-        # elif "efficientnet" in model_name:
-        #     # efficientnet-b0 ~ efficientnet-b7
-        #     if model_name == "efficientnet_b0":
-        #         model = models.efficientnet_b0(pretrained=True)
-        #     elif model_name == "efficientnet_b1":
-        #         model = models.efficientnet_b1(pretrained=True)
-        #     elif model_name == "efficientnet_b2":
-        #         model = models.efficientnet_b2(pretrained=True)
-        #     elif model_name == "efficientnet_b3":
-        #         model = models.efficientnet_b3(pretrained=True)
-        #     elif model_name == "efficientnet_b4":
-        #         model = models.efficientnet_b4(pretrained=True)
-        #     elif model_name == "efficientnet_b5":
-        #         model = models.efficientnet_b5(pretrained=True)
-        #     elif model_name == "efficientnet_b6":
-        #         model = models.efficientnet_b6(pretrained=True)
-        #     elif model_name == "efficientnet_b7":
-        #         model = models.efficientnet_b7(pretrained=True)
-        #     else:
-        #         raise KeyError('Un support %s.' % model_name)
+        elif "efficientnet" in model_name:
+            
+            if model_name in ['efficientnet_b0', 'efficientnet_b1', 'efficientnet_b2', 'efficientnet_b3', 'efficientnet_b4', 'efficientnet_b5', 'efficientnet_b6', 'efficientnet_b7']:
+                model = self._get_efficientnet_model(model_name)
+            else:
+                raise KeyError('Un support %s.' % model_name)
 
-        #     if layer == 'default':
-        #         layer = model.features
-        #         self.layer_output_size = self.EFFICIENTNET_OUTPUT_SIZES[model_name]
-        #     else:
-        #         raise KeyError('Un support %s for layer parameters' % model_name)
+            if layer == 'default':
+                layer = model.features
+                self.layer_output_size = self.EFFICIENTNET_OUTPUT_SIZES[model_name]
+            else:
+                raise KeyError('Un support %s for layer parameters' % model_name)
 
-        #     return model, layer
+            return model, layer
 
         else:
             raise KeyError('Model %s was not found' % model_name)
