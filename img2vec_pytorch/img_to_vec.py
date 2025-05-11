@@ -1,10 +1,11 @@
 import torch
+from torchvision.transforms import v2
+from torchvision.models import alexnet, AlexNet_Weights
 from torchvision.models import resnet18, ResNet18_Weights
 from torchvision.models import resnet34, ResNet34_Weights
 from torchvision.models import resnet50, ResNet50_Weights
 from torchvision.models import resnet101, ResNet101_Weights
 from torchvision.models import resnet152, ResNet152_Weights
-from torchvision.models import alexnet, AlexNet_Weights
 from torchvision.models import vgg11_bn, VGG11_BN_Weights
 from torchvision.models import vgg13_bn, VGG13_BN_Weights
 from torchvision.models import vgg16_bn, VGG16_BN_Weights
@@ -21,9 +22,6 @@ from torchvision.models import efficientnet_b4, EfficientNet_B4_Weights
 from torchvision.models import efficientnet_b5, EfficientNet_B5_Weights
 from torchvision.models import efficientnet_b6, EfficientNet_B6_Weights
 from torchvision.models import efficientnet_b7, EfficientNet_B7_Weights
-from torchvision import transforms
-from torchvision.transforms import v2
-
 
 
 import numpy as np
@@ -31,7 +29,7 @@ import numpy as np
 class Img2Vec():
     RESNET_OUTPUT_SIZES = {
         'resnet18': 512,
-        'resnet34': 512,  # Added resnet34 with correct output size
+        'resnet34': 512,
         'resnet50': 2048,
         'resnet101': 2048,
         'resnet152': 2048
@@ -161,28 +159,28 @@ class Img2Vec():
                     return my_embedding.numpy()[0, :, 0, 0]
 
     def _get_resnet_model(self, model_name):
-            """ Helper function to get ResNet model based on model_name """
-            if model_name == 'resnet18':
-                return resnet18(weights=ResNet18_Weights.DEFAULT)
-            elif model_name == 'resnet34':
-                return resnet34(weights=ResNet34_Weights.DEFAULT)
-            elif model_name == 'resnet50':
-                return resnet50(weights=ResNet50_Weights.DEFAULT)
-            elif model_name == 'resnet101':
-                return resnet101(weights=ResNet101_Weights.DEFAULT)
-            elif model_name == 'resnet152':
-                return resnet152(weights=ResNet152_Weights.DEFAULT)
-            
+        """ Helper function to get ResNet model based on model_name """
+        if model_name == 'resnet18':
+            return resnet18(weights=ResNet18_Weights.DEFAULT)
+        elif model_name == 'resnet34':
+            return resnet34(weights=ResNet34_Weights.DEFAULT)
+        elif model_name == 'resnet50':
+            return resnet50(weights=ResNet50_Weights.DEFAULT)
+        elif model_name == 'resnet101':
+            return resnet101(weights=ResNet101_Weights.DEFAULT)
+        elif model_name == 'resnet152':
+            return resnet152(weights=ResNet152_Weights.DEFAULT)
+        
     def _get_vgg_model(self, model_name):
-            """ Helper function to get VGG model based on model_name """
-            if model_name == 'vgg11':
-                return vgg11_bn(weights=VGG11_BN_Weights.DEFAULT)
-            elif model_name == 'vgg13':
-                return vgg13_bn(weights=VGG13_BN_Weights.DEFAULT)
-            elif model_name == 'vgg16':
-                return vgg16_bn(weights=VGG16_BN_Weights.DEFAULT)
-            elif model_name == 'vgg19':
-                return vgg19_bn(weights=VGG19_BN_Weights.DEFAULT)
+        """ Helper function to get VGG model based on model_name """
+        if model_name == 'vgg11':
+            return vgg11_bn(weights=VGG11_BN_Weights.DEFAULT)
+        elif model_name == 'vgg13':
+            return vgg13_bn(weights=VGG13_BN_Weights.DEFAULT)
+        elif model_name == 'vgg16':
+            return vgg16_bn(weights=VGG16_BN_Weights.DEFAULT)
+        elif model_name == 'vgg19':
+            return vgg19_bn(weights=VGG19_BN_Weights.DEFAULT)
             
     def _get_densenet_model(self, model_name):
         """ Helper function to get DenseNet model based on model_name """
@@ -194,27 +192,26 @@ class Img2Vec():
             return densenet169(weights=DenseNet169_Weights.DEFAULT)  
         elif model_name == 'densenet201':
             return densenet201(weights=DenseNet201_Weights.DEFAULT)     
-    
+
     def _get_efficientnet_model(self, model_name):
         """ Helper function to get EfficientNet model based on model_name """
         if model_name == 'efficientnet_b0':
-            return efficientnet_b0(weights = EfficientNet_B0_Weights.DEFAULT)
+            return efficientnet_b0(weights=EfficientNet_B0_Weights.DEFAULT)
         elif model_name == 'efficientnet_b1':
-            return efficientnet_b1(weights = EfficientNet_B1_Weights.DEFAULT)
+            return efficientnet_b1(weights=EfficientNet_B1_Weights.DEFAULT)
         elif model_name == 'efficientnet_b2':
-            return efficientnet_b2(weights = EfficientNet_B2_Weights.DEFAULT)
+            return efficientnet_b2(weights=EfficientNet_B2_Weights.DEFAULT)
         elif model_name == 'efficientnet_b3':
-            return efficientnet_b3(weights = EfficientNet_B3_Weights.DEFAULT)
+            return efficientnet_b3(weights=EfficientNet_B3_Weights.DEFAULT)
         elif model_name == 'efficientnet_b4':
-            return efficientnet_b4(weights = EfficientNet_B4_Weights.DEFAULT)
+            return efficientnet_b4(weights=EfficientNet_B4_Weights.DEFAULT)
         elif model_name == 'efficientnet_b5':
-            return efficientnet_b5(weights = EfficientNet_B5_Weights.DEFAULT)
+            return efficientnet_b5(weights=EfficientNet_B5_Weights.DEFAULT)
         elif model_name == 'efficientnet_b6':
-            return efficientnet_b6(weights = EfficientNet_B6_Weights.DEFAULT)
+            return efficientnet_b6(weights=EfficientNet_B6_Weights.DEFAULT)
         elif model_name == 'efficientnet_b7':
-            return efficientnet_b7(weights = EfficientNet_B7_Weights.DEFAULT)
-        
-       
+            return efficientnet_b7(weights=EfficientNet_B7_Weights.DEFAULT)
+
     def _get_model_and_layer(self, model_name, layer):
     
         """ Internal method for getting layer from model
