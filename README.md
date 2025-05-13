@@ -12,9 +12,19 @@ Medium post on building the first version from scratch:  https://becominghuman.a
 |Model name|Return vector length|
 |----|----|
 |Resnet-18|512|
+|Resnet-34|512|
+|Resnet-50|2048|
+|Resnet-101|2048|
+|Resnet-152|2048|
 |Alexnet|4096|
 |Vgg-11|4096|
-|Densenet|1024|
+|Vgg-13|4096|
+|Vgg-16|4096|
+|Vgg-19|4096|
+|Densenet121|1024|
+|Densenet161| 2208|
+|Densenet169|1664|
+|Densenet201|1920|
 |efficientnet_b0|1280|
 |efficientnet_b1|1280|
 |efficientnet_b2|1408|
@@ -26,7 +36,7 @@ Medium post on building the first version from scratch:  https://becominghuman.a
 
 ## Installation
 
-Tested on Python 3.6 and torchvision 0.11.0 (nightly, 2021-09-25) 
+Tested on Python 3.6 and torchvision 0.11.0 (nightly, 2021-09-25)
 
 Requires Pytorch: http://pytorch.org/
 
